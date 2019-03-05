@@ -19,7 +19,7 @@ RUN update-ca-certificates --verbose &&\
 # Install PHP 7
 RUN apt-get update && apt-get install -y \
     gzip \
-    php7 \
+    php7.0 \
     php7.0-dom \
     php7.0-ctype \
     php7.0-curl \
