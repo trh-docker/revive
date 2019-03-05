@@ -40,10 +40,7 @@ RUN apt-get update && apt-get install -y \
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 \
-    && chown -R nobody:nobody . \
-    && rm -rf /var/cache/apk/*
-
+RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
 
 EXPOSE 80
 
