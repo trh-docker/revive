@@ -33,7 +33,6 @@ RUN apt-get update && apt-get install -y \
     php7.0-mysqlnd \
     php7.0-opcache \
     php7.0-pdo \
-    php7.0-pdo_mysql \
     php7.0-posix \
     php7.0-session \
     php7.0-xml \
