@@ -9,11 +9,16 @@ WORKDIR /opt/tlm/html
 RUN apt-get update && apt-get install -y curl openssl wget &&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
-# Setting up Caddy Server and AFZ Cert
+# Setting up Caddy Server, AFZ Cert and installing dumb-init
+ENV DINIT=1.2.2
+
 ADD https://raw.githubusercontent.com/adbegon/pub/master/AdfreeZoneSSL.crt /usr/local/share/ca-certificates/
+ADD https://github.com/Yelp/dumb-init/releases/download/v${DINIT}/dumb-init_${DINIT}_amd64.deb /tmp/dumb-init_amd64.deb
+
 RUN update-ca-certificates --verbose &&\
     chmod +x /opt/bin/caddy &&\
     ln -s /opt/bin/caddy /bin/caddy &&\
+    dpkg -i /tmp/dumb-init_amd64.deb && \
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
@@ -43,9 +48,13 @@ RUN apt-get update && apt-get install -y \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
+ADD files/bash/entry.sh /opt/bin/
+RUN chmod +x /opt/bin/entry.sh
 
 ENV DOMAIN=0.0.0.0 \
     PORT=80
 EXPOSE 80
 
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["/opt/bin/entry.sh"]
 # CMD php-fpm7 && nginx -g 'daemon off;'
