@@ -34,7 +34,6 @@ RUN apt-get update && apt-get install -y \
     php7.0-opcache \
     php7.0-pdo \
     php7.0-posix \
-    php7.0-session \
     php7.0-xml \
     php7.0-iconv \
     php7.0-phar \
