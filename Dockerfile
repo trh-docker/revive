@@ -1,8 +1,9 @@
 FROM quay.io/spivegin/caddy_only AS caddy-source 
 
 FROM quay.io/spivegin/tlmbasedebian
-RUN mkdir /opt/bin
+RUN mkdir -p /opt/bin /opt/caddy
 COPY --from=caddy-source /opt/bin/caddy /opt/bin/
+ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
 # Installing Curl and OpenSSL
 RUN apt-get update && apt-get install -y curl openssl wget &&\
@@ -42,6 +43,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
 
+ENV DOMAIN=0.0.0.0 \
+    PORT=80
 EXPOSE 80
 
 # CMD php-fpm7 && nginx -g 'daemon off;'
