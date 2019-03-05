@@ -20,27 +20,27 @@ RUN update-ca-certificates --verbose &&\
 RUN apt-get update && apt-get install -y \
     gzip \
     php7 \
-    php7-dom \
-    php7-ctype \
-    php7-curl \
-    php7-fpm \
-    php7-gd \
-    php7-intl \
-    php7-json \
-    php7-mbstring \
-    php7-mcrypt \
-    php7-mysqli \
-    php7-mysqlnd \
-    php7-opcache \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-posix \
-    php7-session \
-    php7-xml \
-    php7-iconv \
-    php7-phar \
-    php7-openssl \
-    php7-zlib  &&\
+    php7.0-dom \
+    php7.0-ctype \
+    php7.0-curl \
+    php7.0-fpm \
+    php7.0-gd \
+    php7.0-intl \
+    php7.0-json \
+    php7.0-mbstring \
+    php7.0-mcrypt \
+    php7.0-mysqli \
+    php7.0-mysqlnd \
+    php7.0-opcache \
+    php7.0-pdo \
+    php7.0-pdo_mysql \
+    php7.0-posix \
+    php7.0-session \
+    php7.0-xml \
+    php7.0-iconv \
+    php7.0-phar \
+    php7.0-openssl \
+    php7.0-zlib  &&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
