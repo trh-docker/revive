@@ -36,9 +36,7 @@ RUN apt-get update && apt-get install -y \
     php7.0-posix \
     php7.0-xml \
     php7.0-iconv \
-    php7.0-phar \
-    php7.0-openssl \
-    php7.0-zlib  &&\
+    php7.0-phar && \
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
