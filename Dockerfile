@@ -6,7 +6,7 @@ COPY --from=caddy-source /opt/bin/caddy /opt/bin/
 ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
 # Installing Curl and OpenSSL
-RUN apt-get update && apt-get install -y curl openssl gnupg wget gzip git&&\
+RUN apt-get update && apt-get install -y curl openssl gnupg wget gzip git &&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 # Setting up Caddy Server, AFZ Cert and installing dumb-init
