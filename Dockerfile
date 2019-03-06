@@ -6,7 +6,7 @@ COPY --from=caddy-source /opt/bin/caddy /opt/bin/
 ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
 # Installing Curl and OpenSSL
-RUN apt-get update && apt-get install -y curl openssl gnupg wget gzip &&\
+RUN apt-get update && apt-get install -y curl openssl gnupg wget gzip git&&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 # Setting up Caddy Server, AFZ Cert and installing dumb-init
@@ -48,7 +48,10 @@ RUN apt-get update && apt-get install -y \
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
+# RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
+RUN git clone https://github.com/revive-adserver/revive-adserver.git . &&\
+    sh package.sh -b
+
 ADD files/bash/entry.sh /opt/bin/
 ADD files/php/ /etc/php/7.0/fpm/pool.d/
 RUN chmod +x /opt/bin/entry.sh &&\
