@@ -1,8 +1,8 @@
-FROM quay.io/spivegin/caddy_only AS caddy-source 
+FROM quay.io/spivegin/caddy AS caddy-source 
 
 FROM quay.io/spivegin/tlmbasedebian
 RUN mkdir -p /opt/bin /opt/caddy
-COPY --from=caddy-source /opt/bin/caddy /opt/bin/
+COPY --from=caddy-source /opt/caddy/caddy /opt/bin/
 ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
 # Installing Curl and OpenSSL
