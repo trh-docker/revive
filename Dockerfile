@@ -1,7 +1,7 @@
 FROM quay.io/spivegin/caddy_only AS caddy-source 
 
 FROM quay.io/spivegin/tlmbasedebian
-RUN mkdir -p /opt/bin /opt/caddy
+RUN mkdir -p /opt/bin /opt/caddy /run/php/
 COPY --from=caddy-source /opt/bin/caddy /opt/bin/
 ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
@@ -21,11 +21,6 @@ RUN update-ca-certificates --verbose &&\
     dpkg -i /tmp/dumb-init_amd64.deb && \
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
-
-# Install PHP 7
-# RUN apt-get -y install php php-cgi php-curl php-gd php-intl php-mcrypt php-imagick php-fpm php-cli php-xdebug php-pear php-mysql &&\
-#     apt-get autoclean && apt-get autoremove &&\
-#     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 RUN apt-get update && apt-get install -y \
     php7.0 \
@@ -55,7 +50,12 @@ RUN apt-get update && apt-get install -y \
 
 RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
 ADD files/bash/entry.sh /opt/bin/
-RUN chmod +x /opt/bin/entry.sh
+ADD files/php/ /etc/php/7.0/fpm/pool.d/
+RUN chmod +x /opt/bin/entry.sh &&\
+    chmod -R a+w /opt/tlm/html/var &&\
+    chmod -R a+w /opt/tlm/html/plugins &&\
+    chmod -R a+w /opt/tlm/html/www/admin/plugins &&\
+    chmod -R a+w /opt/tlm/html/www/images
 
 ENV DOMAIN=0.0.0.0 \
     PORT=80
@@ -63,4 +63,3 @@ EXPOSE 80
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["/opt/bin/entry.sh"]
-# CMD php-fpm7 && nginx -g 'daemon off;'
