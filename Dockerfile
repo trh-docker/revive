@@ -1,12 +1,12 @@
-FROM quay.io/spivegin/caddy AS caddy-source 
+FROM quay.io/spivegin/caddy_only AS caddy-source 
 
 FROM quay.io/spivegin/tlmbasedebian
 RUN mkdir -p /opt/bin /opt/caddy
-COPY --from=caddy-source /opt/caddy/caddy /opt/bin/
+COPY --from=caddy-source /opt/bin/caddy /opt/bin/
 ADD files/Caddy/Caddyfile /opt/caddy/
 WORKDIR /opt/tlm/html
 # Installing Curl and OpenSSL
-RUN apt-get update && apt-get install -y curl openssl wget &&\
+RUN apt-get update && apt-get install -y curl openssl gnupg wget gzip &&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 # Setting up Caddy Server, AFZ Cert and installing dumb-init
@@ -23,29 +23,32 @@ RUN update-ca-certificates --verbose &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 # Install PHP 7
-RUN apt-get update && apt-get install -y \
-    gzip \
-    php7.0 \
-    php7.0.cgi \
-    php7.0-dom \
-    php7.0-ctype \
-    php7.0-curl \
-    php7.0-fpm \
-    php7.0-gd \
-    php7.0-intl \
-    php7.0-json \
-    php7.0-mbstring \
-    php7.0-mcrypt \
-    php7.0-mysqli \
-    php7.0-mysqlnd \
-    php7.0-opcache \
-    php7.0-pdo \
-    php7.0-posix \
-    php7.0-xml \
-    php7.0-iconv \
-    php7.0-phar && \
+RUN apt-get -y install php php-cgi php-curl php-gd php-intl php-mcrypt php-imagick php-fpm php-cli php-xdebug php-pear php-mysql &&\
     apt-get autoclean && apt-get autoremove &&\
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
+
+# RUN apt-get update && apt-get install -y \
+#     php7.0 \
+#     php7.0.cgi \
+#     php7.0-dom \
+#     php7.0-ctype \
+#     php7.0-curl \
+#     php7.0-fpm \
+#     php7.0-gd \
+#     php7.0-intl \
+#     php7.0-json \
+#     php7.0-mbstring \
+#     php7.0-mcrypt \
+#     php7.0-mysqli \
+#     php7.0-mysqlnd \
+#     php7.0-opcache \
+#     php7.0-pdo \
+#     php7.0-posix \
+#     php7.0-xml \
+#     php7.0-iconv \
+#     php7.0-phar && \
+#     apt-get autoclean && apt-get autoremove &&\
+#     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
 ADD files/bash/entry.sh /opt/bin/
