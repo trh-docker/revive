@@ -50,7 +50,9 @@ RUN apt-get update && apt-get install -y \
 
 # RUN wget -qO- https://download.revive-adserver.com/revive-adserver-4.1.4.tar.gz | tar xz --strip 1 
 RUN git clone https://github.com/revive-adserver/revive-adserver.git . &&\
-    cd plugins_repo  && sh package.sh -b
+    cd plugins_repo  && sh package.sh -b &&\
+    apt-get autoclean && apt-get autoremove &&\
+    rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 ADD files/bash/entry.sh /opt/bin/
 ADD files/php/ /etc/php/7.0/fpm/pool.d/
